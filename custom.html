@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AXSizzle - Custom Art Order</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Pacifico&family=Daydream&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background-image: url('https://t4.ftcdn.net/jpg/04/03/56/31/240_F_403563117_JtShDAex0NbvY1Asy3Wvaiwzxvcqzwr9.jpg');
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-size: 3.5rem;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      color: black;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      position: relative;
+      font-family: 'Daydream', cursive;
+    }
+
+    .popup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  backdrop-filter: blur(6px); /* subtle, smoother blur */
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+
+    .popup-content {
+      background: url('https://wallpapers.com/images/hd/head-village-art-5auutbke9k49vvfp.webp') no-repeat center/cover;
+      padding: 2rem;
+      border-radius: 1.5rem;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 30px gold;
+      color: black; /* text color updated */
+    }
+
+    #paymentPopup .popup-content,
+#thankYouPopup .popup-content {
+  position: relative;
+  overflow: hidden;
+  background: none; /* Ensure no background interferes */
+}
+
+#paymentPopup .popup-content::before,
+#thankYouPopup .popup-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://wallpapers.com/images/hd/head-village-art-5auutbke9k49vvfp.webp') no-repeat center/cover;
+  filter: blur(8px);
+  z-index: -1;
+  opacity: 0.6; /* Adjust visibility */
+}
+
+#paymentPopup .popup-content,
+#thankYouPopup .popup-content {
+  position: relative;
+  overflow: hidden;
+  background: none; /* Ensure no background interferes */
+}
+
+#paymentPopup .popup-content::before,
+#thankYouPopup .popup-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://wallpapers.com/images/hd/head-village-art-5auutbke9k49vvfp.webp') no-repeat center/cover;
+  filter: blur(8px);
+  z-index: -1;
+  opacity: 0.6; /* Adjust visibility */
+}
+
+
+    @keyframes sparkle {
+      0% { box-shadow: 0 0 20px #fff, 0 0 30px #ff0, 0 0 40px #0ff; }
+      100% { box-shadow: 0 0 30px rgb(246, 255, 0), 0 0 40px #ff0, 0 0 50px #fff; }
+    }
+
+    .hidden-file-input {
+      display: none;
+    }
+
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .animate-popup {
+      animation: fadeInScale 0.4s ease-out;
+    }
+
+    .custom-upload-button {
+      display: inline-flex;
+      align-items: center;
+      background-image: url('https://www.transparenttextures.com/patterns/white-wall-3.png');
+      background-color: #f0f0f0;
+      padding: 0.75rem 1.5rem;
+      border: 2px dashed #333;
+      border-radius: 1.5rem;
+      font-size: 1.1rem;
+      color: #222;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    .popup-content {
+  position: relative;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 0 30px gold;
+  color: black;
+  overflow: hidden; /* important to clip the blurred background */
+
+  /* Remove direct background image here if already used */
+  background: none;
+}
+
+.popup-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://wallpapers.com/images/hd/head-village-art-5auutbke9k49vvfp.webp') no-repeat center/cover;
+  filter: blur(8px);
+  z-index: -1;
+  opacity: 0.7; /* control how visible the background is */
+}
+
+
+    .custom-upload-button:hover {
+      background-color: #e0e0e0;
+      border-color: #000;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<header class="relative flex justify-center items-center p-6 text-5xl bg-white bg-opacity-50 backdrop-blur-lg text-black border-b border-black border-opacity-10 z-10">
+  <a href="order.html" class="absolute left-4 text-lg bg-black text-white px-5 py-2 rounded-xl hover:bg-gray-800 transition">← Back</a>
+  Personalized Art by AXSizzle 🎨
+</header>
+
+<div class="fixed inset-0 flex items-center justify-center p-8">
+  <div class="rounded-3xl p-10 shadow-2xl max-w-2xl w-full bg-white bg-opacity-20 backdrop-filter backdrop-blur-2xl border border-white border-opacity-30">
+    <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Get Your Custom Art</h2>
+    <form id="basicForm" class="space-y-6">
+      <div>
+        <input type="text" id="name" name="name" placeholder="Full Name" required
+          class="w-full p-4 rounded-2xl border focus:ring-2 focus:ring-indigo-400">
+      </div>
+      <div>
+        <input type="email" id="email" name="email" placeholder="Email" required
+          pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+          title="Only Gmail addresses are accepted"
+          class="w-full p-4 rounded-2xl border focus:ring-2 focus:ring-indigo-400">
+      </div>
+      <div class="flex justify-center">
+        <button type="button" onclick="openDetailsPopup()"
+          class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-2xl hover:scale-105 transition">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- DETAILS POPUP -->
+<div id="detailsPopup" class="popup flex">
+  <div class="popup-content">
+    <button onclick="closePopup('detailsPopup')" class="absolute top-4 right-6 text-2xl text-gray-800">&times;</button>
+    <h2 class="text-2xl font-bold mb-4">Describe Your Artwork</h2>
+    <p class="text-sm mb-6">Let us know the type of art you'd like (e.g., portrait, sketch, digital illustration) and any specific details you have in mind.</p>
+    <form id="detailsForm" class="space-y-6">
+      <div class="text-left">
+        <label for="artIdea" class="block font-semibold mb-2">Artwork Description</label>
+        <textarea id="artIdea" rows="5" placeholder="Describe your dream artwork..." required
+          class="w-full p-4 rounded-2xl border focus:ring-2 focus:ring-purple-400"></textarea>
+      </div>
+      <div class="flex items-center justify-center">
+        <label for="referenceImage" class="custom-upload-button">
+          <i class="fas fa-camera mr-2"></i> Upload Reference Image
+        </label>
+        <input type="file" id="referenceImage" accept="image/*" class="hidden-file-input" />
+      </div>
+      <div class="flex justify-center">
+        <button type="button" onclick="openPaymentPopup()"
+          class="px-6 py-3 bg-gradient-to-r from-green-400 to-green-600 text-white font-bold rounded-2xl hover:scale-105 transition">
+          Proceed to Payment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- PAYMENT POPUP -->
+<div id="paymentPopup" class="popup flex">
+  <div class="popup-content text-white relative p-8 space-y-8">
+    <button onclick="closePopup('paymentPopup')" class="absolute top-4 right-6 text-3xl text-yellow-300">&times;</button>
+    <h2 class="text-4xl font-extrabold text-yellow-400 text-center">Finalize Your Order</h2>
+    <p class="text-gray-400 italic text-center mb-6">Choose your preferred payment option</p>
+    <div class="grid grid-cols-1 gap-6">
+      <a href="upi://pay?pa=your-upi-id@okaxis&pn=AXSizzle&cu=INR"
+         class="bg-blue-500 py-4 text-xl text-center font-bold rounded-full hover:bg-blue-600 transition">
+        Pay via Google Pay
+      </a>
+      <a href="upi://pay?pa=your-upi-id@ybl&pn=AXSizzle&cu=INR"
+         class="bg-purple-500 py-4 text-xl text-center font-bold rounded-full hover:bg-purple-600 transition">
+        Pay via PhonePe
+      </a>
+      <a href="upi://pay?pa=your-upi-id@upi&pn=AXSizzle&cu=INR"
+         class="bg-green-500 py-4 text-xl text-center font-bold rounded-full hover:bg-green-600 transition">
+        Pay via UPI App
+      </a>
+    </div>
+    <div class="flex justify-center mt-8">
+      <button onclick="paymentCompleted()"
+        class="bg-yellow-400 text-black font-bold py-3 px-8 rounded-full hover:bg-white hover:text-yellow-500 transform hover:scale-105 transition">
+        ✅ Paid
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU POPUP -->
+<div id="thankYouPopup" class="popup flex">
+  <div class="popup-content">
+    <h2 class="text-4xl font-extrabold mb-4">🎉 Thank You, Amazing Soul! 🎨✨</h2>
+    <p class="text-xl font-semibold">
+      Your custom masterpiece is now in the making!<br>
+      🌟 Stay tuned for some magic from <strong>AXSizzle</strong>! 🌟
+    </p>
+  </div>
+</div>
+
+<script>
+function addPopupAnimation(id) {
+  const popup = document.getElementById(id);
+  popup.style.display = 'flex';
+  const content = popup.querySelector('.popup-content');
+  content.classList.remove('animate-popup'); // Reset animation
+  void content.offsetWidth; // Trigger reflow
+  content.classList.add('animate-popup');
+}
+
+function openDetailsPopup() {
+  if (document.getElementById('name').value && document.getElementById('email').validity.valid) {
+    addPopupAnimation('detailsPopup');
+  } else {
+    alert('Please enter a valid Gmail address and your name.');
+  }
+}
+
+function openPaymentPopup() {
+  if (document.getElementById('artIdea').value) {
+    document.getElementById('detailsPopup').style.display = 'none';
+    addPopupAnimation('paymentPopup');
+  } else {
+    alert('Please describe your art idea!');
+  }
+}
+
+function paymentCompleted() {
+  document.getElementById('paymentPopup').style.display = 'none';
+  addPopupAnimation('thankYouPopup');
+
+  setTimeout(() => {
+    document.getElementById('thankYouPopup').style.display = 'none';
+    document.getElementById('basicForm').reset();
+    document.getElementById('detailsForm').reset();
+  }, 4000);
+}
+
+function closePopup(id) {
+  document.getElementById(id).style.display = 'none';
+}
+</script>
+
+</body>
+</html>

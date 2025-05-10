@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AXSizzle Live query </title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Daydream&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Daydream', cursive;
+      background: url("https://t4.ftcdn.net/jpg/04/03/56/31/240_F_403563117_JtShDAex0NbvY1Asy3Wvaiwzxvcqzwr9.jpg") no-repeat center center/cover;
+      background-attachment: fixed;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .chat-box {
+      width: 95%;
+      max-width: 600px;
+      height: 90vh;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(14px);
+      border-radius: 25px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chat-header {
+      padding: 20px;
+      font-size: 2.2rem;
+      text-align: center;
+      font-family: 'Great Vibes', cursive;
+      background: rgba(255, 255, 255, 0.2);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: black;
+      text-decoration: none;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: black;
+      color: white;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-size: 1rem;
+      line-height: 1.4;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: black;
+      color: white;
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+      background: white;
+      color: black;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 15px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+      backdrop-filter: blur(6px);
+      background: rgba(255,255,255,0.6);
+    }
+
+    .chat-input button {
+      margin-left: 10px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      background: black;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .chat-input button:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-box">
+    <div class="chat-header">
+      <a href="index.html" class="back-btn">&#8592;</a>
+      🎨 Live query
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg bot">Hi there! Need help with your art order? 😊</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="sendMsg()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById('chatMessages');
+
+    function appendMessage(text, sender = 'user') {
+      const msg = document.createElement('div');
+      msg.className = `msg ${sender}`;
+      msg.textContent = text;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMsg() {
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendMessage(text, 'user');
+      input.value = "";
+
+      // Save message to backend later here
+      simulateBotReply(text);
+    }
+
+    function simulateBotReply(userText) {
+      setTimeout(() => {
+        const replies = [
+          "Welcome (❁´◡`❁), we'll attend to you soon ASAP!",
+          "Got it! Our artist will reach out shortly.",
+          "Feel free to ask about pricing, turnaround time, or customizations!"
+        ];
+        const reply = replies[Math.floor(Math.random() * replies.length)];
+        appendMessage(reply, 'bot');
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

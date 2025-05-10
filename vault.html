@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Artistory Vault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&family=Daydream&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://t4.ftcdn.net/jpg/04/03/56/31/240_F_403563117_JtShDAex0NbvY1Asy3Wvaiwzxvcqzwr9.jpg') no-repeat center center / cover;
+      z-index: -2;
+      transition: filter 0.4s ease, background-color 0.4s ease;
+    }
+
+    body.modal-open::before {
+      filter: blur(18px);
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    header {
+      font-family: 'Daydream', cursive;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px 0;
+      text-align: center;
+      font-size: 2.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      color: #000;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 28px;
+      padding: 10px 20px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-decoration: none;
+      z-index: 10;
+    }
+
+    .vault-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+      padding: 60px 40px;
+      max-width: 1400px;
+      margin: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .art-card {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .art-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .art-card img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+    }
+
+    .art-info {
+      padding: 20px;
+    }
+
+    .art-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .art-info p {
+      margin: 5px 0;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .price {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #000;
+    }
+
+    .buy-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+
+    .buy-btn:hover {
+      background: #444;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(25px) saturate(120%);
+      -webkit-backdrop-filter: blur(25px) saturate(120%);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .modal img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+
+    .modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-top: 10px;
+    }
+
+    .modal .price {
+      color: green;
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+
+    .modal p {
+      color: #555;
+    }
+
+    .actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .actions button {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 1rem;
+      border-radius: 12px;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .cart-btn {
+      background: rgba(255, 255, 255, 0.9);
+      color: black;
+      border: 2px solid black;
+    }
+
+    .cart-btn:hover {
+      background: black;
+      color: white;
+    }
+
+    .checkout-btn {
+      background: black;
+      color: white;
+      border: 2px solid black;
+    }
+
+    .checkout-btn:hover {
+      background: white;
+      color: black;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+    }
+
+    /* Cart confirmation popup */
+    .cart-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+    }
+
+    .cart-popup .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .popup-content h3 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 20px;
+    }
+
+    .popup-content button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .popup-view {
+      background: black;
+      color: white;
+    }
+
+    .popup-view:hover {
+      background: #333;
+    }
+
+    .popup-shop {
+      background: white;
+      color: black;
+      border: 2px solid black;
+    }
+
+    .popup-shop:hover {
+      background: black;
+      color: white;
+    }
+
+    @keyframes fadeIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .modal-content {
+        padding: 20px;
+      }
+
+      .modal h2 {
+        font-size: 1.4rem;
+      }
+
+      .back-btn {
+        top: 18px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="order.html" class="back-btn">← Back to Order</a>
+    Artistory Vault
+  </header>
+
+  <section class="vault-gallery" id="gallery"></section>
+
+  <div class="modal" id="detailModal">
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <div class="cart-popup" id="cartPopup">
+    <div class="popup-content">
+      
+      <h3>Item added to cart!</h3>
+      <button class="popup-view" onclick="location.href='cart.html'">View Cart</button>
+      <button class="popup-shop" onclick="closeCartPopup()">Shop More</button>
+    </div>
+  </div>
+
+  <script>
+    const artData = [
+      {
+        title: "Sunset Vibe",
+        medium: "Acrylic on Canvas • 18x24 in",
+        price: "₹2,999",
+        img: "https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&h=650"
+        
+      },
+      {
+        title: "Urban Contrast",
+        medium: "Mixed Media • 20x30 in",
+        price: "₹3,750",
+        img: "https://images.pexels.com/photos/370799/pexels-photo-370799.jpeg?auto=compress&cs=tinysrgb&h=650"
+      },
+      {
+        title: "Ocean Dreams",
+        medium: "Watercolor • 12x18 in",
+        price: "₹1,850",
+        img: "https://images.pexels.com/photos/374132/pexels-photo-374132.jpeg?auto=compress&cs=tinysrgb&h=650"
+      },
+      {
+        title: "Mountain Calm",
+        medium: "Photography • 30x40 in",
+        price: "₹4,000",
+        img: "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&h=650"
+      },
+      {
+        title: "City Haze",
+        medium: "Acrylic • 20x20 in",
+        price: "₹3,500",
+        img: "https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&h=650"
+      },
+      {
+        title: "Serene Night",
+        medium: "Oil on Board • 22x28 in",
+        price: "₹3,950",
+        img: "https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&cs=tinysrgb&h=650"
+      }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const modal = document.getElementById("detailModal");
+    const modalContent = document.getElementById("modalContent");
+    const cartPopup = document.getElementById("cartPopup");
+
+    function openModal(item) {
+      modalContent.innerHTML = `
+        <button class="close-modal" onclick="closeModal()">×</button>
+        <img src="${item.img}" alt="${item.title}" />
+        <h2>${item.title}</h2>
+        <p>${item.medium}</p>
+        <p class="price">${item.price}</p>
+        <div class="actions">
+         <button class="cart-btn" onclick='addToCart(${JSON.stringify(item)})'>Add to Cart</button>
+
+          <button class="checkout-btn" onclick="alert('Redirecting to secure payment...')">Buy Now</button>
+        </div>
+      `;
+      document.body.classList.add("modal-open");
+      modal.style.display = "flex";
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+      document.body.classList.remove("modal-open");
+    }
+
+    function addToCart(item) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push(item);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  closeModal();
+  cartPopup.style.display = "flex";
+}
+
+
+    function closeCartPopup() {
+      cartPopup.style.display = "none";
+    }
+
+    for (let item of artData) {
+      gallery.innerHTML += `
+        <div class="art-card">
+          <img src="${item.img}" alt="${item.title}">
+          <div class="art-info">
+            <h3>${item.title}</h3>
+            <p>${item.medium}</p>
+            <p class="price">${item.price}</p>
+            <button class="buy-btn" onclick='openModal(${JSON.stringify(item)})'>Buy Now</button>
+          </div>
+        </div>
+      `;
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) closeModal();
+      if (event.target == cartPopup) closeCartPopup();
+    };
+  </script>
+
+</body>
+</html>
