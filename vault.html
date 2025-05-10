@@ -232,7 +232,6 @@
       color: #999;
     }
 
-    /* Cart confirmation popup */
     .cart-popup {
       display: none;
       position: fixed;
@@ -268,15 +267,6 @@
       border: none;
       cursor: pointer;
       transition: all 0.3s ease;
-    }
-
-    .popup-view {
-      background: black;
-      color: white;
-    }
-
-    .popup-view:hover {
-      background: #333;
     }
 
     .popup-shop {
@@ -327,12 +317,12 @@
 
   <div class="cart-popup" id="cartPopup">
     <div class="popup-content">
-      
       <h3>Item added to cart!</h3>
-      <button class="popup-view" onclick="location.href='cart.html'">View Cart</button>
       <button class="popup-shop" onclick="closeCartPopup()">Shop More</button>
+      <button class="popup-shop" onclick="window.location.href='cart.html'">View Cart</button>
     </div>
   </div>
+  
 
   <script>
     const artData = [
@@ -341,7 +331,6 @@
         medium: "Acrylic on Canvas • 18x24 in",
         price: "₹2,999",
         img: "https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&h=650"
-        
       },
       {
         title: "Urban Contrast",
@@ -389,8 +378,7 @@
         <p class="price">${item.price}</p>
         <div class="actions">
          <button class="cart-btn" onclick='addToCart(${JSON.stringify(item)})'>Add to Cart</button>
-
-          <button class="checkout-btn" onclick="alert('Redirecting to secure payment...')">Buy Now</button>
+         <button class="checkout-btn" onclick="alert('Redirecting to secure payment...')">Buy Now</button>
         </div>
       `;
       document.body.classList.add("modal-open");
@@ -403,13 +391,12 @@
     }
 
     function addToCart(item) {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart.push(item);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  closeModal();
-  cartPopup.style.display = "flex";
-}
-
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push(item);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      closeModal();
+      cartPopup.style.display = "flex";
+    }
 
     function closeCartPopup() {
       cartPopup.style.display = "none";
